@@ -5,16 +5,26 @@ import _io
 import time
 import random as rnd
 
+# pin = my abstraction over RPi.GPIO
+    # blink(on_duration_ms, total_cycle_ms)
+    # set() = out(HIGH)
+    # clear() = out(LOW)
+    # get() = in(), no pullup/pulldown resistor
 
-relay:  pin
-red:    pin
-green:  pin
-buzzer: pin
-face0:  face.face
-alcohol: mq3
-spy:    face.facemon
+relay:      pin
+red:        pin
+green:      pin
+buzzer:     pin
+face0:      face.face
+alcohol:    pin
+spy:        face.facemon
 
+# make the driver intermittently pick up the alcohol IID device and breathe into it
+# alcohol sampled when face detected
+
+# intermittent BrAC (breath-alc-conc) checker
 def do_sentry():
+    red.clear()
     time.sleep(rnd.randint(120, 1800))
     red.blink(20, 1600)
     buzzer.blink(100, 1000)

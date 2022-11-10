@@ -4,21 +4,29 @@ from face_recognition import face_encodings as encode, compare_faces, face_locat
 from numpy import empty as newarr, uint8, NDArray
 
 class facemon:
-    camera = picamera.PiCamera
+    # face memory
     face0: NDArray
+
     camera = picamera.PiCamera()
     camera.resolution = (320, 240)
+
+    # most recent frame containing a face
+    # used when face has just been discovered using has_face()
     recent_positive_frame: NDArray
+
     frame = newarr((240, 320, 3), dtype=uint8)
 
+    # store most recent frame with face into face memory
     def store_face(self):
         self.face0 = encode(self.recent_positive_frame)[0]
 
+    # check if 
     def match_face(self):
         self.camera.capture(self.frame, format="rgb")
         face1 = encode(self.frame)[0]
         return compare_faces([self.face0], face1)
 
+    # face is present in stream?
     def has_face(self):
         start = time()
         total = 0
@@ -28,8 +36,10 @@ class facemon:
                 positve += 1
         total += 1
 
+        # use smoothing for false positives
         return (float(positve)/float(total) >= 0.1)
         
+    # wait for a face to appear
     def wait_face(self):
         while True:
             if self.has_face():

@@ -52,12 +52,12 @@ def on_p(client, userdata, flags):
 
 
 
-client = mqtt.Client()
-client.username_pw_set("dunkirk", "dVn3s*#0f^k1rK")
+client = mqtt.Client("sdfsodijf")
+# client.username_pw_set("dunkirk", "dVn3s*#0f^k1rK")
 client.on_connect = on_connect
 client.on_publish = on_p
 print("before")
-client.connect("roamingwalrus.tk", 8883, 60)
+client.connect("roamingwalrus.tk", 8883)
 print("aft")
 
 # send a message to the raspberry/topic every 1 second, 5 times in a row
@@ -67,4 +67,5 @@ for i in range(5):
     print(f"send {i} to raspberry/topic")
     time.sleep(1)
 
-client.loop_forever()
+client.disconnect()
+# client.loop_forever()

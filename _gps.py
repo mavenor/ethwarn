@@ -18,6 +18,7 @@ io.write(nmea.ubx.UBX('UBX', ('', '40')))
 print("Initialising NEO-6M...")
 print("Current NEO-6M setup:\n" + str(nmea.parse(io.readline())))
 
+# filtering only GGA, GLL, VTG, GSV sentences
 io.write(nmea.ubx.UBX('UBX', ('','40', 'GGA', '0', '1', '1', '0', '0', '0')))
 io.write(nmea.ubx.UBX('UBX', ('','40', 'VTG', '0', '1', '1', '0', '0', '0')))
 io.write(nmea.ubx.UBX('UBX', ('','40', 'GSV', '0', '1', '1', '0', '0', '0')))
