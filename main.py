@@ -1,9 +1,10 @@
-import _mqtt_pub as mqtt
-import _face as face
-import _gps as gps
-import _io
+from _mqtt_pub import *
+from _face import *
+from _gps import *
+from _io import *
 import time
 import random as rnd
+from numpy import NDArray
 
 # pin = my abstraction over RPi.GPIO
     # blink(on_duration_ms, total_cycle_ms)
@@ -15,21 +16,20 @@ relay:      pin
 red:        pin
 green:      pin
 buzzer:     pin
-face0:      face.face
+face0:      NDArray
 alcohol:    pin
-spy:        face.facemon
+spy:        facemon
 
 # make the driver intermittently pick up the alcohol IID device and breathe into it
 # alcohol sampled when face detected
 
 # intermittent BrAC (breath-alc-conc) checker
 def do_sentry():
+    global spy
     red.clear()
     time.sleep(rnd.randint(120, 1800))
-    # red.blink(20, 1600)
-    red.set()
-    # buzzer.blink(100, 1000)
-    buzzer.set()
+    red.blink(20, 1600)
+    buzzer.blink(100, 1000)
     start = time.time()
     while True:
         if (not ((time.time() - start < 90) or (spy.has_face() and spy.match_face()))):
@@ -38,9 +38,9 @@ def do_sentry():
     if not spy.has_face():
         green.clear()
         try:
-            pos: gps.fix = gps.get_fix()
+            pos: fix = getloc()
             viol_msg = f"Measurement avoided\nLocation (lat, long): {pos.latit:#8.4g}, {pos.longit:#8.4g}\n"
-        except gps.NoFixException:
+        except NoFixException:
             viol_msg = f"Measurement avoided\nCannot get fix on location\n"
         mqtt.push_data(viol_msg, "avoiding")
     else:
@@ -51,21 +51,21 @@ def do_sentry():
             time.sleep(10)
             relay.clear()
             try:
-                speed: float = gps.getspeed() # in km/h
+                speed: float = getspeed() # in km/h
                 if (speed > 5):
                     viol_msg = f"Drunken driver\nLocation (lat, long): {pos.latit:#8.4g}, {pos.longit:#8.4g}\n"
                     mqtt.push_data(viol_msg, "violating")
                 else:
                     time.sleep(10)
                     main()
-            except gps.NoFixException:
+            except NoFixException:
                 viol_msg = f"Drunken driver\nCannot get fix on location\n"
                 mqtt.push_data(viol_msg, "violating")
 
         
 def waiton_all_clear():
-    global face0
-    face0 = face.wait_face()
+    global spy
+    spy.wait_face()
     if (alcohol.get() == 1):
         green.clear()
         relay.clear()
