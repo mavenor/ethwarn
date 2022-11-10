@@ -26,8 +26,10 @@ spy:        face.facemon
 def do_sentry():
     red.clear()
     time.sleep(rnd.randint(120, 1800))
-    red.blink(20, 1600)
-    buzzer.blink(100, 1000)
+    # red.blink(20, 1600)
+    red.set()
+    # buzzer.blink(100, 1000)
+    buzzer.set()
     start = time.time()
     while True:
         if (not ((time.time() - start < 90) or (spy.has_face() and spy.match_face()))):
@@ -44,7 +46,8 @@ def do_sentry():
     else:
         if (alcohol.get() == 1):
             red.set()
-            buzzer.blink(1000, 1100)
+            # buzzer.blink(1000, 1100)
+            buzzer.set()
             time.sleep(10)
             relay.clear()
             try:
@@ -77,14 +80,12 @@ def waiton_all_clear():
 
 
 def main():
-    green.blink(20, 1600)
-    red.clear()
+    # green.blink(20, 1600)
+    red.set()
     relay.clear()
     # time.sleep(10)
     waiton_all_clear()
     
-
-
     do_sentry()
 
 
