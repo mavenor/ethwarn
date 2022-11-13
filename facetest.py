@@ -1,11 +1,14 @@
-import face_recognition as fr
-from cv2 import VideoCapture, cvtColor, COLOR_BGR2RGB
+import picamera
 from time import time
+from face_recognition import face_encodings as encode, compare_faces, face_locations, load_image_file as imgread
+from numpy import empty as newarr, uint8, NDArray
 
-img = fr.load_image_file("./foo.jpg")
-encodings = fr.face_encodings(img)
 
-stream = VideoCapture(0)
+img = imgread("./foo.jpg")
+encodings = face_encodings(img)
+
+camera = picamera.PiCamera()
+camera.resolution = (1296, 972)
 start = time()
 while (time() - start < 20):
     __, frame = stream.read()
