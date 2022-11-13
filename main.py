@@ -1,6 +1,7 @@
 from _mqtt_pub import *
 from _face import *
 from _gps import *
+import _io
 from _io import *
 import time
 import random as rnd
@@ -12,12 +13,12 @@ from numpy import NDArray
     # clear() = out(LOW)
     # get() = in(), no pullup/pulldown resistor
 
-relay:      pin
-red:        pin
-green:      pin
-buzzer:     pin
+relay:      outpin
+red:        outpin
+green:      outpin
+buzzer:     outpin
 face0:      NDArray
-alcohol:    pin
+alcohol:    outpin
 spy:        facemon
 
 # make the driver intermittently pick up the alcohol IID device and breathe into it
@@ -80,7 +81,7 @@ def waiton_all_clear():
 
 
 def main():
-    # green.blink(20, 1600)
+    green.blink(20, 1600)
     red.set()
     relay.clear()
     # time.sleep(10)

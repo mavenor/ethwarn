@@ -3,12 +3,6 @@ from time import time, sleep
 import threading
 gpio.setmode(gpio.BOARD)
 
-green   = 15
-relay   = 13
-red     = 18
-buzzer  = 22
-sensor  = 11
-
 class blinker(threading.Thread):
     thePin: int
     on_duration: float
@@ -16,6 +10,7 @@ class blinker(threading.Thread):
     _stop_event: threading.Event
     def __init__(self, thePin: int, on: float, t: float):
         super(blinker, self).__init__()
+        self.thePin = thePin
         self._stop_event = threading.Event()
         self.on_duration = on/1000
         self.off_duration = (t - on)/1000
@@ -33,14 +28,12 @@ class blinker(threading.Thread):
     def stopped(self):
         return self._stop_event.is_set()
 
-class pin:
+class outpin:
     thread: blinker = None
     num: int
-    def __init__(self, inout):
-        if (inout == 1):
-            gpio.setup(self.num, gpio.OUT, initial=gpio.LOW)
-        else:
-            gpio.setup(self.num, gpio.IN)
+    def __init__(self, num: int, init=gpio.LOW):
+        self.num = num
+        gpio.setup(self.num, gpio.OUT, initial=init)
     
     def set(self):
         if not self.thread is None:
@@ -52,11 +45,8 @@ class pin:
             self.thread.stop()
         gpio.output(self.num, gpio.LOW)
 
-    def blink(self, ondur: int , freq: int):
+    def blink(self, ondur: int , t: int):
         if not self.thread is None:
             self.thread.stop()
-        self.thread = blinker()
-            
-        
-    def get(self):
-        return gpio.input(self.num)
+        self.thread = blinker(self.num, ondur, t)
+        self.thread.start()
