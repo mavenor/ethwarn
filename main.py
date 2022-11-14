@@ -1,8 +1,8 @@
 from _mqtt_pub import *
 from _face import *
 from _gps import *
-import _io
-from _io import *
+import _pinio
+from _pinio import *
 import time
 import random as rnd
 from numpy import NDArray
@@ -18,7 +18,7 @@ red:        outpin
 green:      outpin
 buzzer:     outpin
 face0:      NDArray
-alcohol:    outpin
+alcohol:    inpin
 spy:        facemon
 
 # make the driver intermittently pick up the alcohol IID device and breathe into it
