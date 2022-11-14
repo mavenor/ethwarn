@@ -50,7 +50,7 @@ def do_sentry():
             # buzzer.blink(1000, 1100)
             buzzer.set()
             time.sleep(10)
-            relay.clear()
+            relay.set()
             try:
                 speed: float = getspeed() # in km/h
                 if (speed > 5):
@@ -67,15 +67,15 @@ def do_sentry():
 def waiton_all_clear():
     global spy
     spy.wait_face()
-    if (alcohol.get() == 1):
+    if alcohol.get():
         green.clear()
-        relay.clear()
+        relay.set()
         red.set()
         time.sleep(5)
         waiton_all_clear()
     green.set()
     red.clear()
-    relay.set()
+    relay.clear()
     return
 
 
@@ -83,7 +83,7 @@ def waiton_all_clear():
 def main():
     green.blink(20, 1600)
     red.set()
-    relay.clear()
+    relay.set()
     # time.sleep(10)
     waiton_all_clear()
     
