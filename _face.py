@@ -1,7 +1,7 @@
 import picamera2 as cam
 from time import time
 from face_recognition import face_encodings as encode, face_distance as dist, face_locations, load_image_file as imgread
-from numpy import empty as newarr, uint8, NDArray
+from numpy import empty as newarr, uint8, ndarray
 
 
 class facemon:
@@ -10,12 +10,12 @@ class facemon:
 
     # face memory
     # (EMBEDDINGS)
-    face0: list[NDArray]
+    face0: list[ndarray]
 
     # most recent frame containing a face
     # used when face has just been discovered using has_face()
     # (RAW RGB DATA)
-    recent_positive_frame: NDArray
+    recent_positive_frame: ndarray
 
     def __init__(self):
         self.camera = cam.Picamera2()
