@@ -45,7 +45,7 @@ def do_sentry():
             viol_msg = f"Measurement avoided\nCannot get fix on location\n"
         mqtt.push_data(viol_msg, "avoiding")
     else:
-        if (alcohol.get() == 1):
+        if alcohol.get():
             red.set()
             # buzzer.blink(1000, 1100)
             buzzer.set()
