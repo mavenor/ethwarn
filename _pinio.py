@@ -33,7 +33,7 @@ class pin:
     def __del__(self) -> None:
         if self.thread is not None:
             self.thread.stop()
-        gpio.clean
+        gpio.cleanup(self.num)
 
 class outpin(pin):
     thread: blinker = None
