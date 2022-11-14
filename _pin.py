@@ -2,6 +2,7 @@ import RPi.GPIO as gpio
 from time import time, sleep
 import threading
 gpio.setmode(gpio.BOARD)
+gpio.setwarnings(False)
 
 class blinker(threading.Thread):
     thePin: int
@@ -31,8 +32,6 @@ class blinker(threading.Thread):
 class pin:
     num: int
     def __del__(self) -> None:
-        if self.thread is not None:
-            self.thread.stop()
         gpio.cleanup(self.num)
 
 class outpin(pin):
@@ -58,10 +57,17 @@ class outpin(pin):
         self.thread = blinker(self.num, ondur, t)
         self.thread.start()
 
+    def __del__(self) -> None:
+        super.__del__(self)
+        if self.thread is not None:
+            self.thread.stop()
+
+
 class inpin(pin):
     num: int
     def __init__(self, num: int) -> None:
         self.num = num
+        gpio.setup(self.num, gpio.IN)
     
     def get(self) -> bool:
         return not bool(gpio.input(self.num))
