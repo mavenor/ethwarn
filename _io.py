@@ -28,7 +28,14 @@ class blinker(threading.Thread):
     def stopped(self):
         return self._stop_event.is_set()
 
-class outpin:
+class pin:
+    num: int
+    def __del__(self) -> None:
+        if self.thread is not None:
+            self.thread.stop()
+        gpio.clean
+
+class outpin(pin):
     thread: blinker = None
     num: int
     def __init__(self, num: int, init=gpio.LOW):
@@ -50,3 +57,11 @@ class outpin:
             self.thread.stop()
         self.thread = blinker(self.num, ondur, t)
         self.thread.start()
+
+class inpin(pin):
+    num: int
+    def __init__(self, num: int) -> None:
+        self.num = num
+    
+    def get(self) -> bool:
+        return not bool(gpio.input(self.num))
