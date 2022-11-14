@@ -3,6 +3,7 @@ from _face import *
 from _gps import *
 import _pinio
 from _pinio import *
+from RPi.GPIO import HIGH
 import time
 import random as rnd
 from numpy import NDArray
@@ -13,20 +14,19 @@ from numpy import NDArray
     # clear() = out(LOW)
     # get() = in(), no pullup/pulldown resistor
 
-relay:      outpin
-red:        outpin
-green:      outpin
-buzzer:     outpin
-face0:      NDArray
-alcohol:    inpin
-spy:        facemon
+green     = outpin(35)
+red       = outpin(36)
+buzzer    = outpin(37)
+relay     = outpin(38, init=HIGH) # relays are active-low
+alcohol   = inpin(11)
+spy       = facemon()
 
 # make the driver intermittently pick up the alcohol IID device and breathe into it
 # alcohol sampled when face detected
 
 # intermittent BrAC (breath-alc-conc) checker
 def do_sentry():
-    global spy
+    # global spy, red, green, buzzer, relay, alcohol
     red.clear()
     time.sleep(rnd.randint(120, 1800))
     red.blink(20, 1600)
