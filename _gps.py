@@ -36,8 +36,8 @@ gps_tty.write(str(nmea.ubx.UBX('UBX', ('','40', 'TXT', '0', '0', '0', '0', '0', 
 gps_tty.write(str(nmea.ubx.UBX('UBX', ('','40', 'ZDA', '0', '0', '0', '0', '0', '0'))))
 
 class fix:
-    lat: int = 0
-    lng: int = 0
+    lat: float = 0
+    lng: float = 0
 
     
     def __init__(self, lat: int, lng: int) -> None:
