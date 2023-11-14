@@ -5,6 +5,6 @@ face-recognition-models==0.3.0
 numpy==1.23.4
 opencv-python==4.6.0.66
 paho-mqtt==1.6.1
-Pillow==9.3.0
+Pillow==10.0.1
 pynmea2==1.18.0
 pyserial==3.5
